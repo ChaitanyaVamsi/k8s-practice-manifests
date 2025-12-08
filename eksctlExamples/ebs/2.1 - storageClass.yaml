@@ -1,0 +1,23 @@
+# created by k8 admins
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: roboshop-ebs-sc      # -sc to indicate StorageClass
+provisioner: ebs.csi.aws.com # uses AWS EBS CSI driver for dynamic provisioning.
+volumeBindingMode: WaitForFirstConsumer # volume is created only when a pod requests it, and in the same AZ as the pod.
+reclaimPolicy: Retain        # Keep the volume even after PVC deletion
+
+
+
+# What a Provisioner Does
+
+# When you create a PVC, Kubernetes needs a PersistentVolume (PV) to satisfy it.
+
+# A provisioner knows how to create that PV dynamically.
+
+# It interacts with the underlying storage system (like AWS EBS, GCP Persistent Disk, Azure Disk, or a network storage system).
+
+# So the provisioner is basically the “storage factory” behind the scenes.
+
+# echo "Hello from EBS" > /usr/share/nginx/html/index.html

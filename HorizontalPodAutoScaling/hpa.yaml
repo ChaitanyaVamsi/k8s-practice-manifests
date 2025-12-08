@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpadeployment
+  labels:
+    name: hpadeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+     name: hpapod
+  template:
+    metadata:
+      labels:
+       name: hpapod
+    spec:
+      containers:
+        - name: hpacontainer
+          image: k8s.gcr.io/hpa-example
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: hpaclusterservice
+ labels:
+   name: hpaservice
+spec:
+ type: NodePort
+ selector:
+    name: hpapod
+ ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpadeploymentautoscalar
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hpadeployment
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 40
+  - type: Resource
+    resource:
+     name: memory
+     target:
+        type: Utilization
+        averageUtilization: 40
+
+
+# to delete -  kubectl delete deployment hpadeployment
+
+# Your HorizontalPodAutoscaler (HPA) resource:
+
+
+# horizontalpodautoscaler.autoscaling/hpadeploymentautoscalar
+# is still referencing the deleted deployment (hpadeployment). Here's what happens:
+
+# 🚨 Does the HPA consume CPU or memory?
+# No, the HPA itself does not consume meaningful CPU or memory resources.
+
+# It’s just a controller object that watches CPU usage of pods to scale them up/down.
+
+# But since the target deployment (hpadeployment) is gone, the HPA is now orphaned and non-functional.
+
+# 📉 Current Output Breakdown
+
+# 2%/40%, 223%/40%   2   5   5   30h
+# CPU utilization: 2% requested vs 40% target (historical)
+
+# Memory utilization: 223% vs 40% target (historical)
+
+# 2 min pods, 5 current, 5 max
+
+# Age: 30h
+
+# These values are stale and will not update anymore.
+
+# ✅ Clean It Up
+# Since it's no longer useful, you should delete the HPA:
+
+
+# kubectl delete hpa hpadeploymentautoscalar

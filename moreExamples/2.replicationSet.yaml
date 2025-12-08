@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: sample-rs     #controllerName
+  namespace: dev-ns
+spec:
+  replicas: 1
+  selector:           # difference is in selectors
+    matchLabels:
+     app: webapp
+  template:
+    metadata:
+      name: samplepod
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: cont1
+          image: nginx
+          ports:
+            - containerPort: 80
+          resources:                  # use when disk pressure or ephemeral-storage errors
+            requests:
+              ephemeral-storage: "100Mi"
+            limits:
+              ephemeral-storage: "200Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: replicasvc
+  namespace: dev-ns
+spec:
+  type: NodePort
+  selector:
+    app: webapp
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30444
+      name: nginxapp
+
+
+# to delete rs - kubectl delete rs sample-rs -n dev-ns

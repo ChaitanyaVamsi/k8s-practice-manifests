@@ -1,0 +1,51 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: roboshop-ebs-sc      # -sc to indicate StorageClass
+provisioner: ebs.csi.aws.com # uses AWS EBS CSI driver for dynamic provisioning.
+volumeBindingMode: WaitForFirstConsumer # volume is created only when a pod requests it, and in the same AZ as the pod.
+reclaimPolicy: Retain        # Keep the volume even after PVC deletion
+---
+apiVersion: v1
+kind: PersistentVolumeClaim # request for storage
+metadata:
+  name: roboshop-app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: roboshop-ebs-sc #links this PVC to the StorageClass we created.
+  resources:
+    requests:
+      storage: 4Gi #requesting 4GB storage.
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-app-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      volumeMounts:
+        - name: nginx-vol
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: nginx-vol
+      persistentVolumeClaim:
+        claimName: roboshop-app-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80 # service port
+      targetPort: 80 # container port
+      nodePort: 30007

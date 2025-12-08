@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  namespace: test-ns
+spec:
+  replicas: 2
+  selector: #link
+    matchLabels:
+     app: nginx-app
+  template:
+    metadata:
+      name: pod-nginx
+      labels: #link
+        app: nginx-app
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  namespace: test-ns
+spec:
+  type: NodePort
+  selector:
+    app: nginx-app
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30333

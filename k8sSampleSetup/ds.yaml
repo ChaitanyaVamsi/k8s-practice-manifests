@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: appRS
+  namespace: test-ns
+spec:
+  selector:
+    matchLabels:
+     app: sampleApp
+  template:
+    metadata:
+      name: podname
+      labels:
+        app: sampleApp
+      spec:
+        containers:
+          - name: nginxcontainer
+            image: nginx
+            ports:
+              - containerPort: 80

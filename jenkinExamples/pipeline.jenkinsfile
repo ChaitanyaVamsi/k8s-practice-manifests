@@ -1,0 +1,137 @@
+pipeline{
+    agent any
+
+   tools {
+        jdk 'jdk17'
+        maven 'mvnLatest'
+      }
+
+  environment{
+    SCANNER_HOME = tool 'sonar-scanner'
+  }
+
+    stages{
+        stage("git checkout"){
+            steps{
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/ChaitanyaVamsi/project-1.git'
+            }
+
+        }
+
+        stage("mvn compile"){
+            steps{
+                sh 'mvn compile'
+            }
+
+        }
+        stage("mvn test"){
+            steps{
+                 sh 'mvn test'
+            }
+
+        }
+
+          stage("fileSystemScan"){
+            steps{
+                 sh 'trivy fs --format table -o trivy-fs-report.html .'
+            }
+
+        }
+
+         stage("sonarScanner"){
+            steps{
+                 withSonarQubeEnv('sonar') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=project-1 -Dsonar.projectKey=project-1 \
+                              -Dsonar.java.binaries=.
+
+                        '''
+                      }
+            }
+
+        }
+
+        // stage("qualityGate"){
+        //     steps{
+        //   script {
+        //     waitForQualityGate abortPipeline: false , credentialsId: 'sonarToken'
+        //          }
+        //     }
+
+        // }
+
+        stage("mvn build"){
+          steps{
+            sh 'mvn clean install'
+          }
+        }
+
+         stage("publishArtifactsToNexus"){
+          steps{
+            withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'mvnLatest', mavenSettingsConfig: '', traceability: true) {
+                sh 'mvn deploy'
+                              }
+          }
+        }
+
+         stage("buildTagDockerImage"){
+          steps{
+           script{
+                withDockerRegistry(credentialsId: 'docker-Cred', toolName: 'docker') {
+                               sh 'docker build -t codingrefined/sampleproj:latest .'
+                                        }
+                }
+                }
+        }
+
+         stage("trivyImageScan"){
+          steps{
+            sh 'trivy image --format table -o trivy-fs-report.html codingrefined/sampleproj:latest'
+          }
+        }
+
+         stage("pushImage"){
+          steps{
+           script{
+                withDockerRegistry(credentialsId: 'docker-Cred', toolName: 'docker') {
+                               sh 'docker push codingrefined/sampleproj:latest'
+                                        }
+                }
+                }
+        }
+
+        stage("Build & Deploy") {
+    steps {
+        withKubeConfig(
+            caCertificate: '',
+            clusterName: 'kubernetes',
+            contextName: '',
+            credentialsId: 'k8-cred',
+            namespace: 'webapps',
+            restrictKubeConfigAccess: false,
+            serverUrl: 'https://172.31.10.230:6443'
+        ) {
+            sh 'kubectl apply -f deployment-service.yaml'
+        }
+    }
+        }
+
+        stage("verifyDeployment") {
+    steps {
+        withKubeConfig(
+            caCertificate: '',
+            clusterName: 'kubernetes',
+            contextName: '',
+            credentialsId: 'k8-cred',
+            namespace: 'webapps',
+            restrictKubeConfigAccess: false,
+            serverUrl: 'https://172.31.10.230:6443'
+        ) {
+            sh 'kubectl get pods -n webapps'
+            sh 'kubectl get svc -n webapps'
+        }
+    }
+}
+
+      }
+
+ }

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: appRS
+  namespace: test-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+     app: sampleApp
+  template:
+    metadata:
+      name: podname
+      labels:
+        app: sampleApp
+      spec:
+        containers:
+          - name: nginxcontainer
+            image: nginx
+            ports:
+              - containerPort: 80
