@@ -35,12 +35,12 @@ spec:
         - name: user-container
           image: joindevops/user:v1
           imagePullPolicy: Always
-          envFrom:
-            - configMapRef:
-                name: user-config
           ports:
             - name: liveness-port
               port: 8080
+          envFrom:
+            - configMapRef:
+                name: user-config
           resources:
             requests:
               cpu: "100m"
