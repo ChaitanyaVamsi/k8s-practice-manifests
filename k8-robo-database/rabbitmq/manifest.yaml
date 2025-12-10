@@ -32,7 +32,7 @@ spec:
 apiversion: apps/v1
 kind: StatefulSet
 metadata:
-  name: rabbitmq
+  name: rabbitmq-statefulset
   namespace: roboshop
 spec:
   serviceName: rabbitmq-headless-svc
@@ -64,7 +64,7 @@ spec:
       - metadata:
           name: rabbitmq-pvc
         spec:
-          storageClassName: "roboshop-ebs-SC"
+          storageClassName: "roboshop-ebs-sc"
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:

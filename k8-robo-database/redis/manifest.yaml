@@ -62,7 +62,7 @@ spec:
         name: redis-pvc
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: "roboshop-ebs-SC"
+        storageClassName: "roboshop-ebs-sc"
         resources:
           requests:
             storage: 1Gi

@@ -35,7 +35,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongodb
+  name: mongodb-statefulset
   namespace: roboshop
 spec:
   selector:
@@ -64,7 +64,7 @@ spec:
         name: mongodb-pvc
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: "roboshop-ebs-SC"
+        storageClassName: "roboshop-ebs-sc"
         resources:
           requests:
             storage: 1Gi
