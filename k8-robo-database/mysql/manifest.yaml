@@ -51,17 +51,17 @@ spec:
     spec:
       containers:
         - name: mysql-container
-          image:
+          image: joindevops/mysql:v1
           volumeMounts:
             - name: mysql-pvc
               mountPath: /data/db
             - name: mysql-config-volume
               mountPath: /etc/mysql/conf.d/my.cnf
               subPath: my.cnf
-    volume:
-      - name: mysql-config-volume
-        configMap:
-          name: mysql-config
+      volumes:
+        - name: mysql-config-volume
+          configMap:
+            name: mysql-config
   volumeClaimTemplates:
     - metadata:
         name: mysql-pvc
