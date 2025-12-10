@@ -40,9 +40,9 @@ spec:
   serviceName: redis-headless-svc
   selector:
     matchLabels:
-    project: roboshop
-    component: redis
-    tier: db
+      project: roboshop
+      component: redis
+      tier: db
   replicas: 2
   template:
     metadata:
