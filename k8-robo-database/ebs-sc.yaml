@@ -1,7 +1,10 @@
 apiVersion: storage.k8s.io/v1
-kind: StorgeClass
+kind: StorageClass
 metadata:
   name: roboshop-ebs-sc # all should be lower case
 reclaimPolicy: retain
 provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
+
+
+# install drivers
