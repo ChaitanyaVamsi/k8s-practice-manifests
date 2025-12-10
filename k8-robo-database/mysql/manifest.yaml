@@ -73,7 +73,7 @@ spec:
             storage: 1Gi
 ---
 apiVersion: v1
-kind: configMap
+kind: ConfigMap
 metadata:
   name: mysql-config
   namespace: roboshop
