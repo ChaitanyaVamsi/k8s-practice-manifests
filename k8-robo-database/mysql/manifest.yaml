@@ -64,7 +64,7 @@ spec:
             name: mysql-config
   volumeClaimTemplates:
     - metadata:
-        - name: mysql-pvc
+        name: mysql-pvc
       spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: "roboshop-ebs-SC"
