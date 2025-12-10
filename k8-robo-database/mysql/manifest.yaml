@@ -58,10 +58,10 @@ spec:
             - name: mysql-config-volume
               mountPath: /etc/mysql/conf.d/my.cnf
               subPath: my.cnf
-      volume:
-        - name: mysql-config-volume
-          configMap:
-            name: mysql-config
+    volume:
+      - name: mysql-config-volume
+        configMap:
+          name: mysql-config
   volumeClaimTemplates:
     - metadata:
         name: mysql-pvc
