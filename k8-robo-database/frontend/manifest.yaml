@@ -118,9 +118,9 @@ spec:
             failureThreshold: 1
             periodSeconds: 15
           volumeMounts:
-           - name: frontend-volume
-             mountPath: /etc/nginx/nginx.conf
-             subPath: nginx.conf
+            - name: frontend-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
       volumes:
         - name: frontend-volume
           confiMap:
