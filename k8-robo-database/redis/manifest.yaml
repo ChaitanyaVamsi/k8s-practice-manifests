@@ -39,7 +39,7 @@ metadata:
 spec:
   serviceName: redis-headless-svc
   selector:
-    matchLables:
+    matchLabels:
     project: roboshop
     component: redis
     tier: db
@@ -52,7 +52,7 @@ spec:
       tier: db
     spec:
       containers:
-        - name: redis-conatainer
+        - name: redis-container
           image: redis:7.0
           volumeMounts:
             - name: redis-pvc

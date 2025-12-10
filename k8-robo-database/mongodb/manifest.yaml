@@ -56,9 +56,9 @@ spec:
       containers:
         - name: mongodb-container
           image: joindevops/mongodb:v1
-      volumeMounts:
-        - name: mongodb-pvc
-          mountPath: /data/db
+          volumeMounts:
+            - name: mongodb-pvc
+              mountPath: /data/db
   volumeClaimTemplates: # this is PVC requests storage for each pod in replica
     - metadata:
         name: mongodb-pvc
