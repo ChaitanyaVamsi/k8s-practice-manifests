@@ -63,13 +63,13 @@ spec:
               path: /health
               port: liveness-port #this is 8080 port we gave in template.spec.conatiners.ports.name, just a name
             failureThreshold: 1
-            periodSeconds: 15
+            periodSeconds: 60
           livenessProbe:
             httpGet:
               path: /health
               port: liveness-port
             failureThreshold: 1
-            periodSeconds: 15
+            periodSeconds: 60
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
