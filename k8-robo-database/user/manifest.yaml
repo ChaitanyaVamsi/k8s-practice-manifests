@@ -54,7 +54,7 @@ spec:
               port: liveness-port
             failureThreshold: 1
             periodSeconds: 15
-          liveness-port:
+          livenessProbe:
             httpGet:
               path: /health
               port: liveness-port
@@ -72,9 +72,9 @@ spec:
     component: user
     tier: backend
   ports:
-    protocol: TCP
-    port: 8080
-    targetPort: 8080
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
