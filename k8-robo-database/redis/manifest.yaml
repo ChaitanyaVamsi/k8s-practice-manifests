@@ -48,8 +48,8 @@ spec:
     metadata:
       labels:
        project: roboshop
-      component: redis
-      tier: db
+       component: redis
+       tier: db
     spec:
       containers:
         - name: redis-container
