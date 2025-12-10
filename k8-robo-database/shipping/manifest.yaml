@@ -35,8 +35,8 @@ spec:
           image: joindevops/shipping:v1
           imagePullPolicy: Always
           ports:
-          - name: liveness-port
-            port: 8080
+            - name: liveness-port
+              containerPort: 8080
           envFrom:
             - configMapRef:
                 name: shipping-config

@@ -41,7 +41,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: liveness-port
-              port: 8080
+              containerPort: 8080
           envFrom:
             - configMapRef:
                 name: payment-config
