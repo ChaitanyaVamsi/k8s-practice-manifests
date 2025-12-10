@@ -1,0 +1,70 @@
+# service mongodb of type ClusterIp
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+  namespace: roboshop
+spec:
+  selector:
+    project: roboshop
+    component: mongodb
+    tier: db
+  ports:
+    - protocol: TCP
+      port: 27017 # service port
+      targetPort: 27017 # container port
+---
+# headless Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-headless-svc
+  namespace: roboshop
+spec:
+  clusterIP: none # this tage makes it headless service
+  selector:
+    project: roboshop
+    component: mongodb
+    tier: db
+  ports:
+    - protocol: TCP
+      port: 27017 # service port
+      targetPort: 27017 # container port
+---
+# statefulset
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: roboshop
+spec:
+  selector:
+    matchLabels:
+      project: roboshop
+      component: mongodb
+      tier: db
+  serviceName: mongodb-headless-svc # refer headless-svc name
+  replicas: 2
+  template:
+    metadata:
+      name: mongodb
+      labels:
+        project: roboshop
+        component: mongodb
+        tier: db
+    spec:
+      containers:
+        - name: mongodb-container
+          image: joindevops/mongodb:v1
+      volumeMounts:
+        - name: mongodb-pvc
+          mountPath: /data/db
+  volumeClaimTemplates: # this is PVC requests storage for each pod in replica
+    - metadata:
+        name: mongodb-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "roboshop-ebs-SC"
+        resources:
+          requests:
+            storage: 1Gi

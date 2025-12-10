@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  namespace: roboshop
+spec:
+  selector:
+    project: roboshop
+    component: mysql
+    tier: db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headles-svc
+  namespace: roboshop
+spec:
+  clusterIP: none
+  selector:
+    project: roboshop
+    component: mysql
+    tier: db
+  ports:
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+apiVersion: v1
+kind: StatefulSet
+metadata:
+  name: mysql-statefulset
+  namespace: roboshop
+spec:
+  serviceName: mysql-headless-svc
+  replicas: 2
+  selector:
+    matchLabels:
+      project: roboshop
+      component: mysql
+      tier: db
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        component: mysql
+        tier: db
+    spec:
+      containers:
+        - name: mysql-container
+          image:
+          volumeMounts:
+            - name: mysql-pvc
+              mountPath: /data/db
+            - name: mysql-config-volume
+              mountPath:
+              subPath:
+      volume:
+        - name: mysql-config-volume
+          configMap:
+            name: mysql-config
+  volumeClaimTemplates:
+    - metadata:
+        - name: mysql-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "roboshop-ebs-SC"
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: configMap
+metadata:
+  name: mysql-config
+  namespace: roboshop
+data:
+  my.cnf: |
+    [mysqld]
+    innodb_redo_log_capacity = 2G
