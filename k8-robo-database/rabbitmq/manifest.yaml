@@ -60,12 +60,12 @@ spec:
           volumeMounts:
             - name: rabbitmq-pvc
               mountPath: /var/lib/rabbitmq
-    volumeClaimTemplates:
-      - metadata:
-          name: rabbitmq-pvc
-        spec:
-          storageClassName: "roboshop-ebs-sc"
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 1Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: rabbitmq-pvc
+          spec:
+            storageClassName: "roboshop-ebs-sc"
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 1Gi
