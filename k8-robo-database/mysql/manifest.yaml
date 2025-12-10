@@ -29,7 +29,7 @@ spec:
     port: 3306
     targetPort: 3306
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql-statefulset
@@ -56,8 +56,8 @@ spec:
             - name: mysql-pvc
               mountPath: /data/db
             - name: mysql-config-volume
-              mountPath:
-              subPath:
+              mountPath: /etc/mysql/conf.d/my.cnf
+              subPath: my.cnf
       volume:
         - name: mysql-config-volume
           configMap:
