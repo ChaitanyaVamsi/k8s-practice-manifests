@@ -17,7 +17,7 @@ metadata:
    component: shipping
    tier: backend
 spec:
-  minReplicas: 1
+  replicas: 1
   selector:
     matchLabels:
       project: roboshop
