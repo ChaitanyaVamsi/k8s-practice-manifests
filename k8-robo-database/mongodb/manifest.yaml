@@ -21,7 +21,7 @@ metadata:
   name: mongodb-headless-svc
   namespace: roboshop
 spec:
-  clusterIP: none # this tage makes it headless service
+  clusterIP: None # this tage makes it headless service
   selector:
     project: roboshop
     component: mongodb

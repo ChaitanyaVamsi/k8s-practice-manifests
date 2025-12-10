@@ -19,7 +19,7 @@ metadata:
   name: mysql-headles-svc
   namespace: roboshop
 spec:
-  clusterIP: none
+  clusterIP: None
   selector:
     project: roboshop
     component: mysql
