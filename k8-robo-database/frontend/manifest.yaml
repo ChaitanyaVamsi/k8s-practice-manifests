@@ -107,13 +107,13 @@ spec:
               memory: "128Mi"
           readinessProbe:
             httpGet:
-              path: /health
+              path: /
               port: liveness-port
             failureThreshold: 1
             periodSeconds: 60
           livenessProbe:
             httpGet:
-              path: /health
+              path: /
               port: liveness-port
             failureThreshold: 1
             periodSeconds: 60
