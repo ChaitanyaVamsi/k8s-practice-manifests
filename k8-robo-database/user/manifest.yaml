@@ -5,8 +5,8 @@ metadata:
   namespace: roboshop
 data:
   MONGO: "true"
-  REDIS_URL: "redis://redis:6379"
-  MONGO_URL: "mongodb://mongodb:27017/users"
+  REDIS_URL: "redis://redis-svc:6379"
+  MONGO_URL: "mongodb://mongodb-svc:27017/users"
 ---
 apiVersion: apps/v1
 kind: Deployment
