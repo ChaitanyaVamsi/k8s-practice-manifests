@@ -4,7 +4,7 @@ metadata:
   name: shipping-config
   namespace: roboshop
 data:
-  CART_ENDPOINT: "cart:8080"
+  CART_ENDPOINT: "cart-svc:8080"
   DB_HOST: "mysql-svc" # update here properly
 ---
 apiVersion: apps/v1
