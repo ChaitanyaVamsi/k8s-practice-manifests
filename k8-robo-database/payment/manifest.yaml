@@ -4,11 +4,11 @@ metadata:
   name: payment-config
   namespace: roboshop
 data:
-  CART_HOST: "cart"
+  CART_HOST: "cart-svc"
   CART_PORT: "8080"
-  USER_HOST: "user"
+  USER_HOST: "user-svc"
   USER_PORT: "8080"
-  AMQP_HOST: "rabbitmq"
+  AMQP_HOST: "rabbitmq" # rabbitmq-svc
   AMQP_USER: "roboshop"
   AMQP_PASS: "roboshop123"
 ---

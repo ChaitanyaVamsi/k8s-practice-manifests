@@ -5,6 +5,10 @@ metadata:
   namespace: roboshop
 data:
   MONGO: "true"
+  # REDIS_URL format: redis://<service-name>:<port>
+  # 'redis' is the protocol (tells the app it’s Redis)
+  # 'redis-svc' is the Kubernetes service hostname
+  # '6379' is the port Redis listens on
   REDIS_URL: "redis://redis-svc:6379"
   MONGO_URL: "mongodb://mongodb-svc:27017/users"
 ---
