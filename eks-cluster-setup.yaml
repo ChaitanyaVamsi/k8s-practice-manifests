@@ -5,8 +5,16 @@ metadata:
   name: sampleapp
   region: us-east-1
 
+# managedNodeGroups:
+  # - name: roboshop-dev
+  #   instanceTypes: ["m5.large","t3.small", "t3.medium","c5.large"]
+  #   desiredCapacity: 2 #  by default this value is 3
+  #   spot: true
+
 managedNodeGroups:
-  - name: roboshop-dev
-    instanceTypes: ["m5.large","t3.small", "t3.medium","c5.large"]
-    desiredCapacity: 2 #  by default this value is 3
-    spot: true
+  - name: roboshop-ondemand
+    instanceType: t3.medium      # guaranteed, On-Demand
+    desiredCapacity: 2           # 2 nodes
+    minSize: 1
+    maxSize: 3
+    spot: false                  # ensures On-Demand
