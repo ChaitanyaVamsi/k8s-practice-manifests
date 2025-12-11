@@ -8,7 +8,7 @@ data:
   CART_PORT: "8080"
   USER_HOST: "user-svc"
   USER_PORT: "8080"
-  AMQP_HOST: "rabbitmq" # rabbitmq-svc
+  AMQP_HOST: "rabbitmq-svc" # rabbitmq-svc
   AMQP_USER: "roboshop"
   AMQP_PASS: "roboshop123"
 ---
